@@ -12,7 +12,6 @@ public class StopwatchActivity extends Activity {
     private int seconds = 0;
     //Is the stopwatch running?
     private boolean running;
-    private boolean wasRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +20,6 @@ public class StopwatchActivity extends Activity {
         if (savedInstanceState != null) {
             seconds = savedInstanceState.getInt("seconds");
             running = savedInstanceState.getBoolean("running");
-            wasRunning = savedInstanceState.getBoolean("wasRunning");
         }
         runTimer();
     }
@@ -30,41 +28,6 @@ public class StopwatchActivity extends Activity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putInt("seconds", seconds);
         savedInstanceState.putBoolean("running", running);
-        savedInstanceState.putBoolean("wasRunning", wasRunning);
-    }
-
-    /* Replaced by onPause()
-    @Override
-    protected void onStop() {
-        super.onStop();
-        wasRunning = running;
-        running = false;
-    }
-    */
-
-    /* Replaced by onResume()
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (wasRunning) {
-            running = true;
-        }
-    }
-    */
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        wasRunning = running;
-        running = false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (wasRunning) {
-            running = true;
-        }
     }
 
     //Start the stopwatch running when the Start button is clicked.
@@ -76,11 +39,13 @@ public class StopwatchActivity extends Activity {
     public void onClickStop(View view) {
         running = false;
     }
+
     //Reset the stopwatch when the Reset button is clicked.
     public void onClickReset(View view) {
         running = false;
         seconds = 0;
     }
+
     //Sets the number of seconds on the timer.
     private void runTimer() {
         final TextView timeView = (TextView)findViewById(R.id.time_view);
